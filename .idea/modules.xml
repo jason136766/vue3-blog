@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/blog.iml" filepath="$PROJECT_DIR$/.idea/blog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../vue-vben-admin/.idea/vue-vben-admin.iml" filepath="$PROJECT_DIR$/../vue-vben-admin/.idea/vue-vben-admin.iml" />
+      <module fileurl="file://$USER_HOME$/Downloads/vue3-demo/.idea/vue3-demo.iml" filepath="$USER_HOME$/Downloads/vue3-demo/.idea/vue3-demo.iml" />
+      <module fileurl="file://$USER_HOME$/Downloads/移动端UI库之vant/vueclidemo/.idea/vueclidemo.iml" filepath="$USER_HOME$/Downloads/移动端UI库之vant/vueclidemo/.idea/vueclidemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../vuejs-essential/.idea/vuejs-essential.iml" filepath="$PROJECT_DIR$/../vuejs-essential/.idea/vuejs-essential.iml" />
+    </modules>
+  </component>
+</project>
