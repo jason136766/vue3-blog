@@ -31,7 +31,7 @@
 
 <script>
 import {computed, defineComponent, onBeforeMount, reactive} from "vue";
-import helpers from "../utils/helpers";
+import helpers from "../../utils/helpers";
 import {useRoute} from "vue-router";
 
 export default defineComponent({

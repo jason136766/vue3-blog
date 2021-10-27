@@ -5,7 +5,8 @@ export default createStore({
     state: {
         articles: [],
         category_id: 0,
-        article: {}
+        article: {},
+        categories: {}
     },
     getters: {
         getArticles(state) {
@@ -15,12 +16,15 @@ export default createStore({
             helpers.getArticles(state.articles, params)
             return state.articles;
         },
+        getCategories(state) {
+            helpers.getCategories(state.categories)
+            return state.categories
+        }
     },
     mutations: {
         setCategory_id(state, payload) {
             state.category_id = payload.id ?? 0
         }
-
     },
 
 })

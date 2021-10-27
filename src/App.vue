@@ -4,15 +4,9 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import TheHeader from './components/TheHeader.vue'
-import Aside from './components/Aside.vue'
 
 export default defineComponent({
   name: 'App',
-  components: {
-    TheHeader,
-    Aside
-  },
 })
 </script>
 
@@ -27,11 +21,11 @@ body {
 }
 
 .el-container, .el-menu {
-  padding: 0 5em;
+  padding: 0 8em !important;
 }
 
 .el-main {
-  --el-main-padding: 25px 20px
+  --el-main-padding: 25px 20px !important;
 }
 
 .el-aside {

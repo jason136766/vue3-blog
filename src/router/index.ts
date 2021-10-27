@@ -1,4 +1,5 @@
 import {createRouter, createWebHashHistory, RouteRecordRaw} from "vue-router";
+import storage from "../utils/storage";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -19,14 +20,20 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/articles/:id(\\d+)',
         name: 'articles',
-        component: () => import('../views/Article.vue')
+        component: () => import('../views/articles/Show.vue')
     },
     {
-        path: '/login',
-        name: 'login',
-        component: () => import('../views/Login.vue')
-    }
+        path: '/articles/create',
+        name: 'articles.create',
+        component: () => import('../views/articles/Create.vue'),
+        beforeEnter: (to, from, next) => {
+            if (!storage.getExpire('token')) {
+                next('/')
+            }
 
+            next()
+        }
+    },
 ]
 
 const router = createRouter({

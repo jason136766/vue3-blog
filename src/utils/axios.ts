@@ -1,5 +1,7 @@
 import Axios from 'axios'
 import {ElMessage} from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
+
 
 const baseURL = 'http://127.0.0.1:8199/api/v1/'
 
@@ -33,12 +35,10 @@ axios.interceptors.response.use(
     },
     (error) => {
         if (error.response && error.response.data) {
-            const code = error.response.status
-            const msg = error.response.data.message
-            ElMessage.error(`Code: ${code}, Message: ${msg}`)
-            console.error(`[Axios Error]`, error.response)
+            const msg = error.response.data.msg
+            ElMessage.error(msg)
         } else {
-            ElMessage.error(`${error}`)
+            ElMessage.error(error)
         }
         return Promise.reject(error)
     }
