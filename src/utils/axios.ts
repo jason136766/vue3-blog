@@ -1,6 +1,7 @@
 import Axios from 'axios'
 import {ElMessage} from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
+import helpers from "./helpers";
 
 
 const baseURL = 'http://127.0.0.1:8199/api/v1/'
@@ -34,9 +35,23 @@ axios.interceptors.response.use(
         return response
     },
     (error) => {
+
         if (error.response && error.response.data) {
             const msg = error.response.data.msg
-            ElMessage.error(msg)
+
+            if (msg instanceof Object) {
+                let errMsg = ''
+                helpers.recursive(msg, (val: any) => {
+                    errMsg += `<p style="height: 25px;line-height: 25px">${val}</p>`
+                })
+
+                ElMessage.error({
+                    dangerouslyUseHTMLString: true,
+                    message: errMsg
+                })
+            } else {
+                ElMessage.error(msg)
+            }
         } else {
             ElMessage.error(error)
         }

@@ -12,12 +12,12 @@ let getCategories = (categories: any) => {
 }
 
 // 获取所有分类文章
-let getArticles = (articles: any, params = '') => {
+let getArticles = (list: any, params = '') => {
     axios.get('articles' + params).then((res) => {
         if (res.status == 200 && res.data.result) {
-            Object.assign(articles, res.data.result)
+            Object.assign(list, res.data)
         }
-        return articles = []
+        return list = []
     }).catch((err) => {
         console.log('err:', err)
     })
@@ -34,8 +34,22 @@ let getArticle = (article: any, id: number) => {
     })
 }
 
+// 递归获取深层对象值
+let recursive = (obj: any, callback: any) => {
+    Object.keys(obj).forEach(function (key) {
+        var val = obj[key];
+
+        if (typeof val !== 'object') {
+            callback(val);
+        } else {
+            recursive(val, callback);
+        }
+    });
+}
+
 export default {
     getCategories,
     getArticles,
-    getArticle
+    getArticle,
+    recursive
 }
