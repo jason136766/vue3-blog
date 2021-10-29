@@ -11,7 +11,9 @@
             :key="item.id"
             @click="article(item)"
         >
-          <el-descriptions-item :label="item.created_at.split(' ', 1).toString()">标签</el-descriptions-item>
+          <el-descriptions-item :label="item.created_at.split(' ', 1).toString()">
+            {{ item.tag_id }}
+          </el-descriptions-item>
         </el-descriptions>
 
         <el-pagination

@@ -1,6 +1,6 @@
 <template>
   <el-menu
-      :style="{ boxShadow: `var(--el-box-shadow-light)` }"
+      :style="{ boxShadow: `var(--el-box-shadow-light)`}"
       mode="horizontal"
       active-text-color="#409EFF"
       :default-active="`${isActive}`"

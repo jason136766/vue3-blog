@@ -11,21 +11,26 @@
     </el-card>
 
     <el-card class="box-card">
-      <div>2</div>
-      <div>2</div>
-      <div>2</div>
+      <el-badge :value="item.counter" class="item" type="primary" v-for="item in tags">
+        <el-button size="mini">{{ item.tag_name }}</el-button>
+      </el-badge>
+
     </el-card>
   </el-space>
 </template>
 
 <script>
 import {defineComponent} from "vue";
+import {useStore} from "vuex";
 
 export default defineComponent({
   name: "Aside",
   setup() {
+    let store = useStore()
+    let tags = store.getters.getTags
     return {
-      size: 'large'
+      size: 'large',
+      tags
     }
   },
 
@@ -44,5 +49,14 @@ export default defineComponent({
     margin-top: 1em;
   }
 
+}
+
+.item {
+  margin: 1em 0.9em 0 0;
+}
+
+.el-button--mini {
+  min-height: 15px;
+  padding: 7px 10px;
 }
 </style>

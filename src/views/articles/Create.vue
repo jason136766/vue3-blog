@@ -16,7 +16,7 @@
               <el-option
                   :label="item.category_name"
                   v-for="item in categories"
-                  :value="`${item.id}`"
+                  :value="item.id"
                   :key="item.id"
               ></el-option>
             </el-select>
@@ -24,9 +24,13 @@
         </el-col>
         <el-col :span="5">
           <el-form-item prop="tag">
-            <el-select v-model="ruleForm.tag" placeholder="未选择标签">
-              <el-option label="1" value="1"></el-option>
-              <el-option label="2" value="2"></el-option>
+            <el-select v-model="ruleForm.tag_id" placeholder="未选择标签">
+              <el-option
+                  :label="item.tag_name"
+                  v-for="item in tags"
+                  :value="item.id"
+                  :key="item.id"
+              ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -59,14 +63,22 @@ export default defineComponent({
   setup() {
     let store = useStore()
     let router = useRouter()
-    let categories = computed(() => store.state.categories)
+    let categories = store.state.categories
+    let tags = store.getters.getTags
     let form = ref(null)
     let ruleForm = reactive({
       title: '',
       category_id: '',
-      tag: '',
+      tag_id: '',
       content: ''
     })
+
+    let checkSelected = (rule, value, callback) => {
+      if (ruleForm.category_id == '' && ruleForm.tag_id == '') {
+        return callback(new Error('分类和标签至少选择一项'))
+      }
+      callback()
+    }
 
     let rules = reactive({
       title: [
@@ -83,16 +95,14 @@ export default defineComponent({
       ],
       category_id: [
         {
-          required: true,
-          message: '请选择分类',
-          trigger: 'change'
+          validator: checkSelected,
+          trigger: 'change',
         }
       ],
-      tag: [
+      tag_id: [
         {
-          required: true,
-          message: '请选择标签',
-          trigger: 'change'
+          trigger: 'change',
+          validator: checkSelected
         }
       ],
       content: [
@@ -106,13 +116,11 @@ export default defineComponent({
 
     let create = () => {
       form.value.validate().then(() => {
-        console.log(toRaw(ruleForm))
         axios.post('articles', toRaw(ruleForm), {
           headers: {
             'Authorization': storage.getExpire('token')
           }
         }).then(res => {
-          console.log(res)
           if (res.status == 200) {
             ElMessage.success('发布成功')
             router.push('/')
@@ -130,7 +138,8 @@ export default defineComponent({
       categories,
       ruleForm,
       form,
-      create
+      tags,
+      create,
     }
   }
 

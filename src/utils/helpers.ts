@@ -23,6 +23,18 @@ let getArticles = (list: any, params = '') => {
     })
 }
 
+// 获取所有标签
+let getTags = (tags: any) => {
+    axios.get('tags').then((res) => {
+        if (res.status == 200) {
+            Object.assign(tags, res.data)
+        }
+        return tags = []
+    }).catch((err) => {
+        console.log('err:', err)
+    })
+}
+
 // 获取文章详情
 let getArticle = (article: any, id: number) => {
     axios.get(`articles/${id}`).then((res) => {
@@ -51,5 +63,6 @@ export default {
     getCategories,
     getArticles,
     getArticle,
+    getTags,
     recursive
 }
