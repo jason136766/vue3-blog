@@ -22,7 +22,7 @@
       <!--  </ul>-->
     </el-main>
 
-    <el-aside width="350px" class="hidden-sm-and-down">
+    <el-aside class="hidden-sm-and-down">
       <Aside/>
     </el-aside>
   </el-container>

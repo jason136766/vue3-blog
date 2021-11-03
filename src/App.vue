@@ -13,6 +13,7 @@ export default defineComponent({
 <style lang="scss">
 body {
   background-color: #eff2f5;
+  font: 400 16px/1.42 -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
 }
 
 * {
@@ -30,5 +31,6 @@ body {
 
 .el-aside {
   padding: 25px 8px;
+  --el-aside-width: 301px !important;
 }
 </style>

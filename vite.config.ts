@@ -12,6 +12,7 @@ export default defineConfig({
         }),
     ],
     server: {
+        host: '0.0.0.0',
         cors: true,
         // 设置代理，根据我们项目实际情况配置
         proxy: {

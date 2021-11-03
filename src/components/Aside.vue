@@ -1,36 +1,58 @@
 <template>
-  <el-space direction="vertical"
-            style="width:100%"
-            :size="size" :fill="true"
-  >
+  <el-space direction="vertical" style="width:100%" :size="size" :fill="true">
     <el-card class="box-card profile">
       <div>
-        <el-avatar :size="60" src="/avatar.jpeg"></el-avatar>
+        <el-avatar :size="80" src="/avatar.jpeg"></el-avatar>
       </div>
-      <div>write code and love life</div>
+      <div class="motto">
+        <div class="name">Steven</div>
+        <div>write code and love life</div>
+      </div>
+
     </el-card>
-
     <el-card class="box-card">
-      <el-badge :value="item.counter" class="item" type="primary" v-for="item in tags">
-        <el-button size="mini">{{ item.tag_name }}</el-button>
+      <el-divider content-position="center">标签</el-divider>
+      <el-badge :value="item.counter" class="item" type="info" v-for="item in tags" :max="99">
+        <el-button plain size="mini" @click="currentTag(item.id)" :autofocus="index == item.id ? true : false">
+          {{ item.tag_name }}
+        </el-button>
       </el-badge>
-
     </el-card>
   </el-space>
 </template>
 
-<script>
-import {defineComponent} from "vue";
+<script lang="ts">
+import {defineComponent, onBeforeMount, ref} from "vue";
 import {useStore} from "vuex";
+import {useRouter} from "vue-router";
 
 export default defineComponent({
   name: "Aside",
-  setup() {
+  emits: ['setTag'],
+  setup(props, {emit}) {
     let store = useStore()
+    let router = useRouter()
     let tags = store.getters.getTags
+    let index = ref<any>(null)
+
+    onBeforeMount(() => {
+      index.value = localStorage.getItem('tag_id')
+    })
+
+    let currentTag = (id: string) => {
+      if (id) {
+        localStorage.setItem('tag_id', id)
+        index.value = id
+      }
+
+      router.push('/')
+      emit('setTag', id)
+    }
     return {
       size: 'large',
-      tags
+      tags,
+      index,
+      currentTag
     }
   },
 
@@ -38,6 +60,14 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+.motto {
+  .name {
+    margin: 1em 0;
+  }
+
+  font-weight: 300;
+}
+
 .profile {
   padding: 5px 0;
 
@@ -45,18 +75,18 @@ export default defineComponent({
     text-align: center;
   }
 
-  :nth-child(2) {
-    margin-top: 1em;
-  }
-
 }
 
 .item {
-  margin: 1em 0.9em 0 0;
+  margin: 1.1em 0.98em 0 0;
 }
 
 .el-button--mini {
   min-height: 15px;
-  padding: 7px 10px;
+  padding: 7px 9px;
+}
+
+.el-divider--horizontal {
+  margin: 5px 0 10px 0;
 }
 </style>

@@ -3,47 +3,68 @@
 
   <el-container>
     <el-main>
-      <el-card class="box-card">
-        <el-descriptions
-            :title="item.title"
-            v-for="item in list.result"
-            class="article"
-            :key="item.id"
-            @click="article(item)"
-        >
-          <el-descriptions-item :label="item.created_at.split(' ', 1).toString()">
-            {{ item.tag_id }}
-          </el-descriptions-item>
-        </el-descriptions>
+      <el-card>
+        <div v-for="item in list.result"
+             class="post-container"
+             :key="item.id"
+             @click="article(item)">
+
+          <div class="post-title">{{ item.title }}</div>
+          <el-breadcrumb class="post-info">
+            <el-breadcrumb-item>{{ item.created_at.split(' ', 1).toString() }}</el-breadcrumb-item>
+            <el-breadcrumb-item>{{ tagName(item.id) }}</el-breadcrumb-item>
+
+          </el-breadcrumb>
+        </div>
 
         <el-pagination
             v-model:currentPage="currentPage"
-            background
             layout="prev, pager, next"
             :page-count="pageCount"
             @current-change="handleCurrentChange"
         ></el-pagination>
       </el-card>
+
+
     </el-main>
 
-    <el-aside width="330px" class="hidden-sm-and-down">
-      <Aside/>
+    <el-aside class="hidden-sm-and-down">
+      <Aside @setTag="currentTag"/>
     </el-aside>
   </el-container>
 
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onBeforeMount, reactive, ref} from "vue";
+import {computed, defineComponent, onBeforeMount, reactive, ref, toRaw} from "vue";
 import {useRouter} from "vue-router";
+import {useStore} from "vuex";
 import helpers from "../utils/helpers";
 
 export default defineComponent({
   name: "Home",
   setup() {
     let router = useRouter()
+    let store = useStore()
     let currentPage = ref()
     let list = reactive<any>({})
+    let tags = computed(() => store.state.tags).value
+
+    let tagName = (id: string) => {
+
+
+      let item
+      for (let key in tags) {
+        if (tags[key].id == id) {
+          item = toRaw(tags[key])
+        }
+      }
+
+      if (item) {
+        return item.tag_name
+      }
+    }
+
 
     onBeforeMount(() => {
       let page = localStorage.getItem('page')
@@ -68,6 +89,19 @@ export default defineComponent({
 
       if (id) {
         params = `?category_id=${id}`
+      }
+
+      localStorage.removeItem('page')
+      currentPage.value = 1
+      helpers.getArticles(list, params)
+    }
+
+    // 设置当前标签
+    let currentTag = (id: string) => {
+      let params = ''
+
+      if (id) {
+        params = `?tag_id=${id}`
       }
 
       localStorage.removeItem('page')
@@ -103,20 +137,47 @@ export default defineComponent({
       currentPage,
       list,
       pageCount,
+      tagName,
       article,
       handleCurrentChange,
       currentCategory,
-      search
+      search,
+      currentTag
     }
   }
 })
 </script>
 
-<style scoped>
-.article {
-  margin-bottom: 1em;
-  padding: 0.5em 0 0.5em 0;
-  border-bottom: 1px solid #E4E7ED;
+<style lang="scss" scoped>
+.post-container {
+  padding-bottom: 3.5em;
+
+  .post-title {
+    font-size: 28px;
+    padding-bottom: 17px;
+    letter-spacing: 0.03em;
+    color: #414141;
+  }
+
+  .post-title:hover {
+    cursor: pointer;
+    color: #409EFF;
+  }
+
+
+  ::v-deep .el-breadcrumb {
+    font-size: 12px;
+  }
+
+  ::v-deep .el-breadcrumb__separator {
+    font-weight: lighter;
+    color: #DCDFE6;
+  }
+
+  ::v-deep .el-breadcrumb__inner {
+    color: #606266;
+  }
+
 }
 
 .el-pagination {

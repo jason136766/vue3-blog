@@ -1,11 +1,10 @@
 <template>
   <el-menu
-      :style="{ boxShadow: `var(--el-box-shadow-light)`}"
+      :style="{ boxShadow: `var(--el-box-shadow-light)`,'border-top':'2px solid #409EFF'}"
       mode="horizontal"
       active-text-color="#409EFF"
       :default-active="`${isActive}`"
   >
-    <el-menu-item>Kevin Blog</el-menu-item>
     <el-menu-item index="/" @click="currentCategory('')">Home</el-menu-item>
     <el-menu-item
         :index="`${item.id}`"
@@ -96,6 +95,8 @@ export default defineComponent({
         localStorage.removeItem('category_id')
       }
 
+      localStorage.removeItem('tag_id')
+
       router.push('/')
       emit('setCategory', id)
     }
@@ -157,6 +158,10 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+.el-menu--horizontal > .el-menu-item, .el-menu--horizontal > .el-menu-item.is-active {
+  border-bottom: none;
+}
+
 .action, .search {
   margin-left: auto;
 }
