@@ -1,7 +1,7 @@
 <template>
   <TheHeader/>
 
-  <el-card class="create" :body-style="{padding:'2em'}">
+  <el-card class="create" :body-style="{padding:'2em 2em 0.2em 2em'}">
     <div class="title">新建博文</div>
     <el-form :rules="rules" :model="ruleForm" ref="form">
       <el-row :gutter="22">
@@ -37,7 +37,7 @@
       </el-row>
 
       <el-form-item prop="content">
-        <md-editor v-model="ruleForm.content"/>
+        <v-md-editor v-model="ruleForm.content" height="600px"/>
       </el-form-item>
 
       <el-form-item>
@@ -47,10 +47,8 @@
   </el-card>
 </template>
 
-<script>
-import {computed, defineComponent, reactive, ref, toRaw} from "vue";
-import MdEditor from 'md-editor-v3'
-import 'md-editor-v3/lib/style.css'
+<script lang="ts">
+import {defineComponent, reactive, ref, toRaw} from "vue";
 import {useStore} from "vuex";
 import axios from "../../utils/axios";
 import storage from "../../utils/storage"
@@ -59,13 +57,12 @@ import {useRouter} from "vue-router";
 
 export default defineComponent({
   name: "Create",
-  components: {MdEditor},
   setup() {
     let store = useStore()
     let router = useRouter()
     let categories = store.state.categories
     let tags = store.getters.getTags
-    let form = ref(null)
+    let form = ref<any>(null)
     let ruleForm = reactive({
       title: '',
       category_id: '',
@@ -73,7 +70,7 @@ export default defineComponent({
       content: ''
     })
 
-    let checkSelected = (rule, value, callback) => {
+    let checkSelected = (rule: any, value: any, callback: any) => {
       if (ruleForm.category_id == '' && ruleForm.tag_id == '') {
         return callback(new Error('分类和标签至少选择一项'))
       }

@@ -1,5 +1,5 @@
 <template>
-  <el-space direction="vertical" style="width:100%" :size="size" :fill="true">
+  <el-space direction="vertical" :size="size" :fill="true" class="aside">
     <el-card class="box-card profile">
       <div>
         <el-avatar :size="80" src="/avatar.jpeg"></el-avatar>
@@ -60,6 +60,11 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+.aside {
+  font: 400 16px/1.42 -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  width: 100%;
+}
+
 .motto {
   .name {
     margin: 1em 0;

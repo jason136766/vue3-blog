@@ -13,13 +13,11 @@
           </div>
         </div>
         <el-divider></el-divider>
+        
+        <v-md-editor :value="article.content" mode="preview"></v-md-editor>
 
-        <div class="content" v-html="markdownToHtml"></div>
       </el-card>
-      <!--  <ul class="nav-bottom">-->
-      <!--    <li class="prev">上一篇</li>-->
-      <!--    <li class="next">下一篇</li>-->
-      <!--  </ul>-->
+
     </el-main>
 
     <el-aside class="hidden-sm-and-down">
@@ -32,18 +30,12 @@
 import {computed, defineComponent, onBeforeMount, reactive} from "vue";
 import helpers from "../../utils/helpers";
 import {useRoute} from "vue-router";
-import marked from 'marked';
 
 export default defineComponent({
   name: "Article",
   setup() {
     let route = useRoute()
     let article = reactive({})
-    let markdownToHtml = computed(() => {
-      if (article.content) {
-        return marked(article.content)
-      }
-    })
 
     let created_at = computed(() => {
       if (article.created_at) {
@@ -58,7 +50,6 @@ export default defineComponent({
     return {
       article,
       created_at,
-      markdownToHtml
     }
   }
 })

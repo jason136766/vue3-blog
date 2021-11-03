@@ -17,14 +17,13 @@
 
     <el-menu-item index="about">About</el-menu-item>
 
-    <el-menu-item class="search" width="200px">
+    <el-menu-item class="search">
       <el-input
           placeholder="搜索"
           suffix-icon="el-icon-search"
           size="medium"
           resize="horizontal"
           v-model="search"
-          :clearable="true"
           @change="select"
       />
     </el-menu-item>
@@ -38,30 +37,30 @@
   <!-- 登录 -->
   <el-dialog
       v-model="display"
-      title="登录"
+      title="Login"
       :before-close="close"
       width="410px"
       center
   >
-    <el-form ref="form" class="login">
-      <div>
-        <el-input type="text" placeholder="username" v-model.trim="username"></el-input>
-      </div>
-      <div>
-        <el-input type="password" placeholder="password" v-model.trim="password"
+    <el-form ref="form" class="login" :rules="rules" :model="ruleForm">
+      <el-form-item prop="username">
+        <el-input type="text" placeholder="username" v-model.trim="ruleForm.username"></el-input>
+      </el-form-item>
+      <el-form-item prop="password">
+        <el-input type="password" placeholder="password" v-model.trim="ruleForm.password"
                   @keyup.enter="onSubmit"></el-input>
-      </div>
+      </el-form-item>
 
-      <div>
-        <el-button type="primary" @click="onSubmit" class="submit">Login</el-button>
-      </div>
+      <el-form-item class="login-submit">
+        <el-button type="primary" @click="login" class="submit">Submit</el-button>
+      </el-form-item>
     </el-form>
 
   </el-dialog>
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeMount, ref} from "vue";
+import {defineComponent, onBeforeMount, reactive, ref, toRaw} from "vue";
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
 import axios from "../utils/axios";
@@ -76,11 +75,41 @@ export default defineComponent({
     let router = useRouter()
     let categories = store.getters.getCategories
     let display = ref(false)
-    let username = ref('')
-    let password = ref('')
     let isLogin = ref(false)
     let isActive = ref<string | null>(localStorage.getItem('category_id') ?? '/')
     let search = ref('')
+    let form = ref<any>(null)
+    let ruleForm = reactive({
+      username: '',
+      password: '',
+    })
+
+    let rules = reactive({
+      username: [
+        {
+          required: true,
+          message: '请输入用户名',
+          trigger: 'blur'
+        },
+        {
+          min: 5,
+          message: '请输入至少 5 位字符',
+          trigger: 'blur'
+        }
+      ],
+      password: [
+        {
+          required: true,
+          message: '请输入密码',
+          trigger: 'blur'
+        },
+        {
+          min: 6,
+          message: '请输入至少 6 位字符',
+          trigger: 'blur'
+        }
+      ],
+    })
 
     onBeforeMount(() => {
       checkLogin()
@@ -103,15 +132,20 @@ export default defineComponent({
 
     let close = () => display.value = false
 
-    let onSubmit = () => {
-      axios.post('login', {username: username.value, password: password.value}).then(res => {
-        if (res.status == 200) {
-          ElMessage.success('登录成功')
-          storage.setExpire('token', res.data.access_token, res.data.expires_in)
-          isLogin.value = true
-          display.value = false
-        }
+    let login = () => {
+      form.value.validate().then(() => {
+        axios.post('login', toRaw(ruleForm)).then(res => {
+          if (res.status == 200) {
+            ElMessage.success('登录成功')
+            storage.setExpire('token', res.data.access_token, res.data.expires_in)
+            isLogin.value = true
+            display.value = false
+          }
+        })
+      }).catch(() => {
+        console.log('校验失败');
       })
+
     }
 
     let createArticle = () => {
@@ -140,14 +174,15 @@ export default defineComponent({
     return {
       categories,
       display,
-      username,
-      password,
       isLogin,
       isActive,
       search,
+      form,
+      rules,
+      ruleForm,
       currentCategory,
       close,
-      onSubmit,
+      login,
       createArticle,
       checkLogin,
       select
@@ -162,16 +197,22 @@ export default defineComponent({
   border-bottom: none;
 }
 
+.el-menu-item {
+  font-size: 15px;
+}
+
 .action, .search {
   margin-left: auto;
 }
 
 .search {
+  width: 280px !important;
+
   &:hover {
     background: none !important;
   }
 
-  margin-left: 2em;
+  margin-left: 0;
 
   ::v-deep .el-input__inner {
     border-radius: 20px;
@@ -182,12 +223,15 @@ export default defineComponent({
   font-weight: bold;
 }
 
-
 .login {
   padding: 0 1.5em;
 
-  div {
-    margin-bottom: 1.2em;
+  .el-form-item {
+    margin-bottom: 2.5em;
+  }
+
+  .login-submit {
+    margin-bottom: 1em;
   }
 
   ::v-deep .submit {

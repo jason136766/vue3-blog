@@ -5,7 +5,7 @@
     <el-main>
       <el-card>
         <div v-for="item in list.result"
-             class="post-container"
+             class="post"
              :key="item.id"
              @click="article(item)">
 
@@ -13,9 +13,9 @@
           <el-breadcrumb class="post-info">
             <el-breadcrumb-item>{{ item.created_at.split(' ', 1).toString() }}</el-breadcrumb-item>
             <el-breadcrumb-item>{{ tagName(item.id) }}</el-breadcrumb-item>
-
           </el-breadcrumb>
         </div>
+
 
         <el-pagination
             v-model:currentPage="currentPage"
@@ -149,14 +149,21 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.post-container {
-  padding-bottom: 3.5em;
+.post:first-child .post-title {
+  margin-top: 0;
+}
+
+.post {
+  border-bottom: 1px solid #EBEEF5;
 
   .post-title {
-    font-size: 28px;
-    padding-bottom: 17px;
-    letter-spacing: 0.03em;
-    color: #414141;
+    margin: 1em 0;
+    font-size: 18px;
+  }
+
+
+  .post-info {
+    margin-bottom: 1em;
   }
 
   .post-title:hover {
@@ -181,8 +188,8 @@ export default defineComponent({
 }
 
 .el-pagination {
-  padding: 0.5em 0 0.2em 0 !important;
-  margin-left: -0.3em !important;
+  margin-top: 1em;
+  margin-left: -1em !important;
 }
 
 </style>
