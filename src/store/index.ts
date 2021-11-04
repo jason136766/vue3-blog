@@ -4,7 +4,8 @@ import helpers from "../utils/helpers";
 export default createStore({
     state: {
         categories: {},
-        tags: {}
+        tags: {},
+        isLogin: false
     },
     getters: {
         getCategories(state) {
@@ -18,6 +19,11 @@ export default createStore({
             return state.tags
         }
     },
-    mutations: {},
+    mutations: {
+        setIsLogin(state, val: boolean) {
+            console.log(val)
+            state.isLogin = val
+        }
+    },
 
 })

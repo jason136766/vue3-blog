@@ -48,7 +48,7 @@
       </el-form-item>
       <el-form-item prop="password">
         <el-input type="password" placeholder="password" v-model.trim="ruleForm.password"
-                  @keyup.enter="onSubmit"></el-input>
+                  @keyup.enter="login"></el-input>
       </el-form-item>
 
       <el-form-item class="login-submit">
@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeMount, reactive, ref, toRaw} from "vue";
+import {computed, defineComponent, onBeforeMount, reactive, ref, toRaw} from "vue";
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
 import axios from "../utils/axios";
@@ -75,7 +75,7 @@ export default defineComponent({
     let router = useRouter()
     let categories = store.getters.getCategories
     let display = ref(false)
-    let isLogin = ref(false)
+    let isLogin = computed(() => store.state.isLogin)
     let isActive = ref<string | null>(localStorage.getItem('category_id') ?? '/')
     let search = ref('')
     let form = ref<any>(null)
@@ -138,7 +138,8 @@ export default defineComponent({
           if (res.status == 200) {
             ElMessage.success('登录成功')
             storage.setExpire('token', res.data.access_token, res.data.expires_in)
-            isLogin.value = true
+            store.commit('setIsLogin', true)
+
             display.value = false
           }
         })
@@ -154,9 +155,9 @@ export default defineComponent({
 
     let checkLogin = () => {
       if (storage.getExpire('token')) {
-        return isLogin.value = true
+        return store.commit('setIsLogin', true)
       }
-      return isLogin.value = false
+      return store.commit('setIsLogin', false)
     }
 
     let select = (val: string) => {
@@ -174,9 +175,9 @@ export default defineComponent({
     return {
       categories,
       display,
-      isLogin,
       isActive,
       search,
+      isLogin,
       form,
       rules,
       ruleForm,

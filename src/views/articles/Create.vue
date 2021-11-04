@@ -138,6 +138,13 @@ export default defineComponent({
       tags,
       create,
     }
+  },
+  beforeRouteEnter: (to, from, next) => {
+    if (!storage.getExpire('token')) {
+      next('/')
+    }
+
+    next()
   }
 
 })

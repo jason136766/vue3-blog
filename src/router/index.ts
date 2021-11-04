@@ -26,13 +26,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/articles/create',
         name: 'articles.create',
         component: () => import('../views/articles/Create.vue'),
-        beforeEnter: (to, from, next) => {
-            if (!storage.getExpire('token')) {
-                next('/')
-            }
-
-            next()
-        }
+    },
+    {
+        path: '/articles/edit',
+        name: 'articles.edit',
+        component: () => import('../views/articles/Create.vue'),
     },
 ]
 

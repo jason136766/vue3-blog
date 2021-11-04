@@ -12,7 +12,7 @@
           <div class="post-title">{{ item.title }}</div>
           <el-breadcrumb class="post-info">
             <el-breadcrumb-item>{{ item.created_at.split(' ', 1).toString() }}</el-breadcrumb-item>
-            <el-breadcrumb-item>{{ tagName(item.id) }}</el-breadcrumb-item>
+            <el-breadcrumb-item>{{ item.read_minutes }} min read</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
 
@@ -45,26 +45,8 @@ export default defineComponent({
   name: "Home",
   setup() {
     let router = useRouter()
-    let store = useStore()
     let currentPage = ref()
     let list = reactive<any>({})
-    let tags = computed(() => store.state.tags).value
-
-    let tagName = (id: string) => {
-
-
-      let item
-      for (let key in tags) {
-        if (tags[key].id == id) {
-          item = toRaw(tags[key])
-        }
-      }
-
-      if (item) {
-        return item.tag_name
-      }
-    }
-
 
     onBeforeMount(() => {
       let page = localStorage.getItem('page')
@@ -137,7 +119,6 @@ export default defineComponent({
       currentPage,
       list,
       pageCount,
-      tagName,
       article,
       handleCurrentChange,
       currentCategory,
@@ -157,8 +138,8 @@ export default defineComponent({
   border-bottom: 1px solid #EBEEF5;
 
   .post-title {
-    margin: 1em 0;
-    font-size: 18px;
+    margin: 1em 0 1em 0;
+    font-size: 20px;
   }
 
 
@@ -182,7 +163,7 @@ export default defineComponent({
   }
 
   ::v-deep .el-breadcrumb__inner {
-    color: #606266;
+    color: #7c8087;
   }
 
 }
