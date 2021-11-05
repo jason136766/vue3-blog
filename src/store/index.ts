@@ -5,7 +5,8 @@ export default createStore({
     state: {
         categories: {},
         tags: {},
-        isLogin: false
+        isLogin: false,
+        article: {}
     },
     getters: {
         getCategories(state) {
@@ -21,7 +22,6 @@ export default createStore({
     },
     mutations: {
         setIsLogin(state, val: boolean) {
-            console.log(val)
             state.isLogin = val
         }
     },

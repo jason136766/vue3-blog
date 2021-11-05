@@ -41,33 +41,48 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="create">发布</el-button>
+        <el-button type="primary" @click="publish">发布</el-button>
       </el-form-item>
     </el-form>
   </el-card>
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, ref, toRaw} from "vue";
+import {computed, defineComponent, nextTick, onBeforeMount, onMounted, reactive, ref, toRaw} from "vue";
 import {useStore} from "vuex";
 import axios from "../../utils/axios";
 import storage from "../../utils/storage"
 import {ElMessage} from "element-plus";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import helpers from "../../utils/helpers";
 
 export default defineComponent({
-  name: "Create",
+  name: "Form",
   setup() {
     let store = useStore()
     let router = useRouter()
+    let route = useRoute()
     let categories = store.state.categories
     let tags = store.getters.getTags
     let form = ref<any>(null)
-    let ruleForm = reactive({
+    let article = <any>{}
+    let ruleForm = reactive<any>({
       title: '',
       category_id: '',
       tag_id: '',
       content: ''
+    })
+
+    onBeforeMount(async () => {
+      if (route.params.id) {
+        await helpers.getArticle(article, <any>route.params.id)
+      }
+
+      ruleForm.title = article.title
+      ruleForm.category_id = article.category_id
+      ruleForm.tag_id = article.tag_id
+      ruleForm.content = article.content
+      ruleForm.id = article.id
     })
 
     let checkSelected = (rule: any, value: any, callback: any) => {
@@ -111,12 +126,17 @@ export default defineComponent({
       ],
     })
 
-    let create = () => {
+    let publish = () => {
       form.value.validate().then(() => {
-        axios.post('articles', toRaw(ruleForm), {
+        let method = route.params.id ? 'patch' : 'post'
+
+        axios({
           headers: {
             'Authorization': storage.getExpire('token')
-          }
+          },
+          method: <any>method,
+          url: 'articles',
+          data: toRaw(ruleForm)
         }).then(res => {
           if (res.status == 200) {
             ElMessage.success('发布成功')
@@ -136,7 +156,7 @@ export default defineComponent({
       ruleForm,
       form,
       tags,
-      create,
+      publish,
     }
   },
   beforeRouteEnter: (to, from, next) => {

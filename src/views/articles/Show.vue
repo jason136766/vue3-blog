@@ -15,7 +15,7 @@
             <el-breadcrumb-item>{{ article.read_minutes }} min read</el-breadcrumb-item>
           </el-breadcrumb>
 
-          <Edit v-if="isLogin" class="edit"/>
+          <Edit v-if="isLogin" class="edit" @click="articleEdit"/>
         </div>
 
         <div class="divider"></div>
@@ -31,10 +31,10 @@
   </el-container>
 </template>
 
-<script>
+<script lang="ts">
 import {computed, defineComponent, onBeforeMount, reactive} from "vue";
 import helpers from "../../utils/helpers";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {Edit} from "@element-plus/icons"
 import {useStore} from "vuex";
 
@@ -44,11 +44,10 @@ export default defineComponent({
   components: {Edit},
   setup() {
     let route = useRoute()
+    let router = useRouter()
     let store = useStore()
-    let article = reactive({})
+    let article = reactive<any>({})
     let isLogin = computed(() => store.state.isLogin)
-
-
     let created_at = computed(() => {
       if (article.created_at) {
         return article.created_at.split(' ', 1).toString()
@@ -56,13 +55,19 @@ export default defineComponent({
     })
 
     onBeforeMount(() => {
-      helpers.getArticle(article, route.params.id)
+      helpers.getArticle(article, <any>route.params.id)
     })
+
+    let articleEdit = () => {
+      localStorage.setItem('article', JSON.stringify(article))
+      router.push(`/articles/edit/${article.id}`)
+    }
 
     return {
       article,
       created_at,
-      isLogin
+      isLogin,
+      articleEdit
     }
   }
 })
@@ -70,11 +75,11 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .article {
-  padding: 1em;
+  padding: 0.5em 1em;
 
   .title {
     margin-bottom: 1em;
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .describe {

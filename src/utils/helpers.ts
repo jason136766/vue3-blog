@@ -36,8 +36,8 @@ let getTags = (tags: any) => {
 }
 
 // 获取文章详情
-let getArticle = (article: any, id: number) => {
-    axios.get(`articles/${id}`).then((res) => {
+let getArticle = async (article: any, id: number) => {
+    await axios.get(`articles/${id}`).then((res) => {
         if (res.status == 200) {
             Object.assign(article, res.data)
         }

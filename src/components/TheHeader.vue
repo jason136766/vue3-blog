@@ -1,6 +1,6 @@
 <template>
   <el-menu
-      :style="{ boxShadow: `var(--el-box-shadow-light)`,'border-top':'2px solid #409EFF'}"
+      :style="{ boxShadow: `var(--el-box-shadow-light)`,'border-top':'3px solid #409EFF'}"
       mode="horizontal"
       active-text-color="#409EFF"
       :default-active="`${isActive}`"
@@ -116,7 +116,6 @@ export default defineComponent({
     })
 
     let currentCategory = (id: string) => {
-
       if (id) {
         localStorage.setItem('category_id', id)
         isActive.value = id
@@ -139,7 +138,6 @@ export default defineComponent({
             ElMessage.success('登录成功')
             storage.setExpire('token', res.data.access_token, res.data.expires_in)
             store.commit('setIsLogin', true)
-
             display.value = false
           }
         })
