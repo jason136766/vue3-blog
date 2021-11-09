@@ -30,6 +30,6 @@ body {
 
 .el-aside {
   padding: 25px 8px;
-  --el-aside-width: 301px !important;
+  --el-aside-width: 270px !important;
 }
 </style>

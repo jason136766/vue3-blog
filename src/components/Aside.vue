@@ -11,12 +11,23 @@
 
     </el-card>
     <el-card class="box-card">
-      <el-divider content-position="center">标签</el-divider>
-      <el-badge :value="item.counter" class="item" type="info" v-for="item in tags" :max="99">
-        <el-button plain size="mini" @click="currentTag(item.id)" :autofocus="index == item.id ? true : false">
-          {{ item.tag_name }}
-        </el-button>
-      </el-badge>
+      <el-divider content-position="center" class="tag-header">标签</el-divider>
+
+
+      <el-row :gutter="15">
+        <el-col
+            :span="8"
+            v-for="item in tags"
+            class="tags"
+            @click="currentTag(item.id)"
+        >
+          <div class="tag" :class="{selected : index == item.id}">
+            {{ item.tag_name }}
+            <span>{{ item.counter }}</span>
+          </div>
+        </el-col>
+      </el-row>
+
     </el-card>
   </el-space>
 </template>
@@ -49,7 +60,7 @@ export default defineComponent({
       emit('setTag', id)
     }
     return {
-      size: 'large',
+      size: 25,
       tags,
       index,
       currentTag
@@ -82,8 +93,9 @@ export default defineComponent({
 
 }
 
+
 .item {
-  margin: 1.1em 0.98em 0 0;
+  margin: 1.1em 1.5em 0 0;
 }
 
 .el-button--mini {
@@ -94,4 +106,48 @@ export default defineComponent({
 .el-divider--horizontal {
   margin: 5px 0 10px 0;
 }
+
+.selected {
+  color: #409EFF !important;
+  background-color: #ecf5ff;
+  border: 1px solid #b3d8ff;
+  box-shadow: none;
+
+  span {
+    background-color: #409EFF !important;
+  }
+}
+
+.tag-header {
+  margin-bottom: 8px;
+}
+
+.tags {
+  margin-top: 15px;
+
+  .tag {
+    &:hover {
+      cursor: pointer;
+    }
+
+    text-align: center;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    font-size: 13px;
+    color: #606266;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 4px;
+
+    span {
+      color: #FFFFFF;
+      background-color: #b6b7b9;
+      display: inline-block;
+      height: 11px;
+      line-height: 11px;
+      padding: 2px 3px;
+      border-radius: 2px;
+    }
+  }
+}
+
 </style>

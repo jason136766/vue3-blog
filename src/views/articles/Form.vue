@@ -37,7 +37,7 @@
       </el-row>
 
       <el-form-item prop="content">
-        <v-md-editor v-model="ruleForm.content" height="600px"/>
+        <v-md-editor v-model="ruleForm.content" :include-level="[3,4]" height="600px"/>
       </el-form-item>
 
       <el-form-item>

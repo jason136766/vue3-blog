@@ -16,7 +16,6 @@
           </el-breadcrumb>
         </div>
 
-
         <el-pagination
             v-model:currentPage="currentPage"
             layout="prev, pager, next"
@@ -24,8 +23,6 @@
             @current-change="handleCurrentChange"
         ></el-pagination>
       </el-card>
-
-
     </el-main>
 
     <el-aside class="hidden-sm-and-down">
@@ -141,8 +138,7 @@ export default defineComponent({
     margin: 1em 0 1em 0;
     font-size: 20px;
   }
-
-
+  
   .post-info {
     margin-bottom: 1em;
   }
@@ -151,7 +147,6 @@ export default defineComponent({
     cursor: pointer;
     color: #409EFF;
   }
-
 
   ::v-deep .el-breadcrumb {
     font-size: 12px;

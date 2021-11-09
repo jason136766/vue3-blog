@@ -5,16 +5,12 @@ import 'element-plus/theme-chalk/display.css';
 import store from './store';
 import VMdEditor from '@kangc/v-md-editor';
 import '@kangc/v-md-editor/lib/style/base-editor.css';
-import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
-import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
+import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
+import '@kangc/v-md-editor/lib/theme/style/github.css';
+import hljs from 'highlight.js';
 
-// Prism
-import Prism from 'prismjs';
-// highlight code
-import 'prismjs/components/prism-json';
-
-VMdEditor.use(vuepressTheme, {
-    Prism,
+VMdEditor.use(githubTheme, {
+    Hljs: hljs,
 });
 
 const app = createApp(App);
