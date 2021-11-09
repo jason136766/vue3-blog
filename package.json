@@ -12,6 +12,7 @@
     "axios": "^0.21.4",
     "element-plus": "^1.1.0-beta.16",
     "prismjs": "^1.25.0",
+    "serve": "^13.0.2",
     "unplugin-vue-components": "^0.15.3",
     "vue": "^3.2.13",
     "vue-router": "^4.0.11",
