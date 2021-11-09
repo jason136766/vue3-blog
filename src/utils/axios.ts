@@ -4,7 +4,7 @@ import 'element-plus/theme-chalk/el-message.css'
 import helpers from "./helpers";
 
 
-const baseURL = 'http://127.0.0.1:8199/api/v1/'
+const baseURL = <string>import.meta.env.VITE_APP_DOMAIN
 
 const axios = Axios.create({
     baseURL,
