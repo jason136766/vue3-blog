@@ -136,9 +136,10 @@ export default defineComponent({
 
   .post-title {
     margin: 1em 0 1em 0;
-    font-size: 20px;
+    font-size: 19px;
+    color: #434343;
   }
-  
+
   .post-info {
     margin-bottom: 1em;
   }

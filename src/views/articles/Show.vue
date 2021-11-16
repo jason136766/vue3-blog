@@ -40,7 +40,18 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, nextTick, onBeforeMount, onMounted, reactive, ref, watch, watchEffect} from "vue";
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onBeforeMount,
+  onDeactivated,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+  watchEffect
+} from "vue";
 import helpers from "../../utils/helpers";
 import {useRoute, useRouter} from "vue-router";
 import {Edit} from "@element-plus/icons"
@@ -73,12 +84,16 @@ export default defineComponent({
       helpers.getArticle(article, <any>route.params.id)
     })
 
+    onDeactivated(() => {
+      window.removeEventListener('scroll', onScroll)
+    })
+
     watchEffect(() => {
       if (article.content) {
         nextTick(() => {
           getAnchors()
 
-          window.addEventListener('scroll', onScroll)
+          window.addEventListener('scroll', onScroll, false)
         })
       }
     })
@@ -107,8 +122,12 @@ export default defineComponent({
       let heading = preview.value.$el.querySelector(`[data-v-md-line="${lineIndex}"]`);
 
       if (heading) {
-        heading.scrollIntoView()
+        window.scrollTo({
+          top: heading.offsetTop + 200,
+          behavior: "smooth",
+        });
       }
+
     }
 
     const articleEdit = () => {
@@ -117,13 +136,6 @@ export default defineComponent({
     }
 
     const onScroll = () => {
-      // 获取所有锚点元素
-      const hDomes = preview.value.$el.querySelectorAll('h1, h2, h3, h4, h5, h6')
-      // 所有锚点元素的 offsetTop
-      const offsetTopArr: any[] = []
-      hDomes.forEach((item: { offsetTop: any; }) => {
-        offsetTopArr.push(item.offsetTop)
-      })
       // 获取当前文档流的 scrollTop
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
 
@@ -132,17 +144,28 @@ export default defineComponent({
       } else {
         isFixed.value = false
       }
+
+      if (scrollTop == 0) {
+        isActive.value = 0
+      }
+
+      // 获取所有锚点元素
+      const hDomes = preview.value.$el.querySelectorAll('h1, h2, h3, h4, h5, h6')
+      // 所有锚点元素的 offsetTop
+      const offsetTopArr: any[] = []
+      hDomes.forEach((item: { offsetTop: any; }) => {
+        offsetTopArr.push(item.offsetTop)
+      })
+
       // 定义当前点亮的导航下标
-      let navIndex = 0
       for (let n = 0; n < offsetTopArr.length; n++) {
         // 如果 scrollTop 大于等于第n个元素的 offsetTop 则说明 n-1 的内容已经完全不可见
         // 那么此时导航索引就应该是n了
-        if (scrollTop >= offsetTopArr[n]) {
-          navIndex = n
+        if (scrollTop >= offsetTopArr[n] + 200) {
+          isActive.value = n
         }
       }
 
-      isActive.value = navIndex
     }
 
     return {
@@ -169,6 +192,7 @@ export default defineComponent({
   .title {
     margin-bottom: 1em;
     font-size: 22px;
+    color: #434343;
   }
 
   .describe {
@@ -196,7 +220,7 @@ export default defineComponent({
   }
 
   ::v-deep .el-breadcrumb__inner {
-    color: #7c8087;
+    color: #606266;
   }
 
   .divider {
@@ -223,6 +247,7 @@ export default defineComponent({
 
 .isActive {
   color: #409EFF;
+  font-weight: bold;
 }
 
 
@@ -237,6 +262,22 @@ export default defineComponent({
   width: 240px;
   color: #7c8087;
   font-size: 14px;
+}
+
+::v-deep .github-markdown-body {
+  color: #606266;
+
+
+  h2, h3, h4, h5, h6 {
+    color: #555555;
+  }
+
+  letter-spacing: 0.06em;
+
+  p, li {
+    margin: 0.5em 0;
+    line-height: 25px;
+  }
 }
 
 </style>
