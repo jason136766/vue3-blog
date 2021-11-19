@@ -265,18 +265,13 @@ export default defineComponent({
 }
 
 ::v-deep .github-markdown-body {
-  color: #606266;
-
-
-  h2, h3, h4, h5, h6 {
-    color: #555555;
-  }
-
-  letter-spacing: 0.06em;
+  color: #555555;
 
   p, li {
+    letter-spacing: 0.02em;
     margin: 0.5em 0;
     line-height: 25px;
+    font-family: "Microsoft YaHei", Helvetica, "Meiryo UI", "Malgun Gothic", "Segoe UI", "Trebuchet MS", "Monaco", monospace, Tahoma, STXihei, "华文细黑", STHeiti, "Helvetica Neue", "Droid Sans", "wenquanyi micro hei", FreeSans, Arimo, Arial, SimSun, "宋体", Heiti, "黑体", sans-serif;
   }
 }
 

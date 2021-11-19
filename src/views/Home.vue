@@ -58,12 +58,12 @@ export default defineComponent({
       return Math.ceil(list.count / list.page_size)
     })
 
-    let article = (item: any) => {
+    const article = (item: any) => {
       router.push(`/articles/${item.id}`)
     }
 
     // 设置当前分类
-    let currentCategory = (id: string) => {
+    const currentCategory = (id: string) => {
       let params = ''
 
       if (id) {
@@ -76,7 +76,7 @@ export default defineComponent({
     }
 
     // 设置当前标签
-    let currentTag = (id: string) => {
+    const currentTag = (id: string) => {
       let params = ''
 
       if (id) {
@@ -89,13 +89,13 @@ export default defineComponent({
     }
 
     // 设置当前页
-    let handleCurrentChange = (val: any) => {
+    const handleCurrentChange = (val: any) => {
       helpers.getArticles(list, getParams(val))
       currentPage.value = val
       localStorage.setItem('page', val)
     }
 
-    let getParams = (val: any) => {
+    const getParams = (val: any) => {
       let category_id: string | null = localStorage.getItem('category_id')
       let title: string | null = localStorage.getItem('search')
       let params
@@ -108,7 +108,7 @@ export default defineComponent({
       return params
     }
 
-    let search = (val: string) => {
+    const search = (val: string) => {
       helpers.getArticles(list, `?title=${val}`)
     }
 

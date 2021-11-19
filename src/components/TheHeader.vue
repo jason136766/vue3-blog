@@ -23,15 +23,13 @@
           suffix-icon="el-icon-search"
           size="medium"
           resize="horizontal"
-          v-model="search"
-          @change="select"
+          v-model.trim="searchValue"
+          @keyup.enter="search(searchValue)"
       />
     </el-menu-item>
 
     <el-menu-item v-if="isLogin" class="action" @click="createArticle">写文章</el-menu-item>
-
     <el-menu-item v-else class="action" @click="display=true">登录</el-menu-item>
-
   </el-menu>
 
   <!-- 登录 -->
@@ -77,7 +75,7 @@ export default defineComponent({
     let display = ref(false)
     let isLogin = computed(() => store.state.isLogin)
     let isActive = ref<string | null>(localStorage.getItem('category_id') ?? '/')
-    let search = ref('')
+    let searchValue = ref<any>('')
     let form = ref<any>(null)
     let ruleForm = reactive({
       username: '',
@@ -115,7 +113,7 @@ export default defineComponent({
       checkLogin()
     })
 
-    let currentCategory = (id: string) => {
+    const currentCategory = (id: string) => {
       if (id) {
         localStorage.setItem('category_id', id)
         isActive.value = id
@@ -129,9 +127,9 @@ export default defineComponent({
       emit('setCategory', id)
     }
 
-    let close = () => display.value = false
+    const close = () => display.value = false
 
-    let login = () => {
+    const login = () => {
       form.value.validate().then(() => {
         axios.post('login', toRaw(ruleForm)).then(res => {
           if (res.status == 200) {
@@ -147,18 +145,18 @@ export default defineComponent({
 
     }
 
-    let createArticle = () => {
+    const createArticle = () => {
       router.push('/articles/create')
     }
 
-    let checkLogin = () => {
+    const checkLogin = () => {
       if (storage.getExpire('token')) {
         return store.commit('setIsLogin', true)
       }
       return store.commit('setIsLogin', false)
     }
 
-    let select = (val: string) => {
+    const search = (val: string) => {
       if (val) {
         localStorage.setItem('search', val)
       } else {
@@ -174,7 +172,7 @@ export default defineComponent({
       categories,
       display,
       isActive,
-      search,
+      searchValue,
       isLogin,
       form,
       rules,
@@ -184,7 +182,7 @@ export default defineComponent({
       login,
       createArticle,
       checkLogin,
-      select
+      search
     }
   },
 })
