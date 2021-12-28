@@ -5,7 +5,6 @@ import helpers from "./helpers";
 
 
 const baseURL = <string>import.meta.env.VITE_API_URL
-console.log(baseURL)
 
 const axios = Axios.create({
     baseURL,

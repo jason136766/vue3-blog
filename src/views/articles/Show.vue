@@ -144,11 +144,7 @@ export default defineComponent({
       } else {
         isFixed.value = false
       }
-
-      if (scrollTop == 0) {
-        isActive.value = 0
-      }
-
+      
       // 获取所有锚点元素
       const hDomes = preview.value.$el.querySelectorAll('h1, h2, h3, h4, h5, h6')
       // 所有锚点元素的 offsetTop

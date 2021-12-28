@@ -17,7 +17,7 @@
 
     <el-menu-item index="about">About</el-menu-item>
 
-    <el-menu-item class="search">
+    <el-menu-item class="search" index="search">
       <el-input
           placeholder="搜索"
           suffix-icon="el-icon-search"
@@ -28,8 +28,8 @@
       />
     </el-menu-item>
 
-    <el-menu-item v-if="isLogin" class="action" @click="createArticle">写文章</el-menu-item>
-    <el-menu-item v-else class="action" @click="display=true">登录</el-menu-item>
+    <el-menu-item v-if="isLogin" class="action" @click="createArticle" index="action">写文章</el-menu-item>
+    <el-menu-item v-else class="action" @click="display=true" index="action">登录</el-menu-item>
   </el-menu>
 
   <!-- 登录 -->
